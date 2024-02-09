@@ -10,6 +10,7 @@ class HBNBCommand(cmd.Cmd):
     """Command line interpreter for CRUD in AirBnB console"""
     intro = "Welcome to HBNBCommand console. Type 'help' for more info"
     prompt = "(hbnb) "
+    __classes = ["BaseModel", "OtherClass"]
 
     def do_quit(self, args):
         """Quit command to exit the program\n"""
@@ -34,11 +35,17 @@ class HBNBCommand(cmd.Cmd):
             print ("** class name missing **")
             return
         class_name = args.split()[0]
+        class_name = class_name.lower()
 
-        if class_name not in self.BaseModel:
-            print("** class doesn't exist **")
-            return
-        
+        self.BaseModel.setdefault(class_name, [])
+
+        with open('BaseModel.json', 'w') as f:
+            json.dump(self.BaseModel, f)
+
+            if class_name not in self.BaseModel:
+                print("** class doesn't exist **")
+                return
+
         instance_create = {"id": str(uuid.uuid4())}
         self.BaseModel[class_name].append(instance_create)
         print(instance_create['id'])
@@ -52,22 +59,55 @@ class HBNBCommand(cmd.Cmd):
         line = args.split()
         class_name = line[0]
 
-        if class_name not in self.BaseModel:
-            print ("** class doesn't exist **")
+        if class_name not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
             return
 
-        if len(line) < 2:
+        elif len(line) < 2:
             print("** instance id missing **")
             return
 
-        the_is = line[1]
-        instance_show = [instance for instance in self.BaseModel[class_name] if instance['id'] == the_id]
+        the_id = line[1]
 
-        if not instance_show:
+        if class_name not in self.BaseModel or the_id not in self.BaseModel[class_name]:
             print ("** no instance found **")
             return
+        else:
+            print (self.BaseModel[class_name][the_id])
 
-        print (instance_show[0])
+    def do_destroy(self, args):
+        """Deletes an instance based on the class name and id"""
+        if not args:
+            print("** class name missing **")
+            return
+
+        args_list = args.split()
+        if len(args_list) < 2:
+            print("** instance id missing **")
+            return
+
+        class_name = args_list[0]
+        instance_id = args_list[1]
+
+        if class_name not in self.BaseModel:
+            print("** class doesn't exist **")
+            return
+
+        instances = self.BaseModel[class_name]
+
+        if not any(instance['id'] == instance_id for instance in instances):
+            print("** no instance found **")
+            return
+
+        # Find the index of the instance with the given ID
+        index = next((i for i, instance in enumerate(instances) if instance['id'] == instance_id), None)
+
+        # Remove the instance from the list
+        if index is not None:
+            del instances[index]
+            print('Instance deleted successfully')
+        else:
+            print("** no instance found **")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
