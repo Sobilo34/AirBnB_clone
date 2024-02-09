@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
+import models
 import uuid
-import json
 import datetime
 
 
@@ -9,13 +9,15 @@ class BaseModel():
     """ Class that defines all common attributes"""
     def __init__(self, *args, **kwargs):
         """Initalizes instances of the BaseModel"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key not in self.__dict__ and key != "__class__":
+                    self.__dict__[key] = value
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
 
-        for key, value in kwargs.items():
-            if key not in self.__dict__ and key != "__class__":
-                self.__dict__[key] = value
 
     def __str__(self):
         class_name = self.__class__.__name__
@@ -24,6 +26,7 @@ class BaseModel():
 
     def save(self):
         self.updated_at = datetime.datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         my_dict = self.__dict__.copy()
