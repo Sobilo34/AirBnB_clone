@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
-import sys
-import os
-
-os.chdir("/Users/Hp/RunVagrant/AirBnB_clone")
-print(os.getcwd())
-# Add the current directory to sys.path
-sys.path.append(os.getcwd())
-print(sys.path)
 
 import models
 import uuid
 import datetime
+
+TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 class BaseModel():
@@ -19,13 +13,17 @@ class BaseModel():
         """Initalizes instances of the BaseModel"""
         if kwargs:
             for key, value in kwargs.items():
-                if key not in self.__dict__ and key != "__class__":
+                if key == "created_at" or key == "updated_at":
+                    datetime_obj = (
+                        datetime.datetime.strptime(value, TIME_FORMAT))
+                    self.__dict__[key] = datetime_obj
+                elif key not in self.__dict__ and key != "__class__":
                     self.__dict__[key] = value
+
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
-
 
     def __str__(self):
         class_name = self.__class__.__name__
@@ -42,9 +40,7 @@ class BaseModel():
         my_dict["created_at"] = my_dict["created_at"].isoformat()
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()
         my_dict["__class__"] = self.__class__.__name__
-        print("my_dict")
-        print(my_dict)
-        return (my_dict)
+        return my_dict
 
 
 if __name__ == "__main__":
