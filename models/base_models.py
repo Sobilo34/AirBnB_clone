@@ -1,16 +1,8 @@
 #!/usr/bin/env python3
-import sys
-import os
 
-os.chdir("/Users/Hp/RunVagrant/AirBnB_clone")
-print(os.getcwd())
-# Add the current directory to sys.path
-sys.path.append(os.getcwd())
-print(sys.path)
-
-import models
 import uuid
 import datetime
+from models import storage
 
 
 class BaseModel():
