@@ -19,13 +19,21 @@ class FileStorage:
     def save(self):
         """Save __objects to a JSON file in __file_path"""
         json_dict = {}
-
-        for key, obj in FileStorage.__object.items():
+        print("Printing self.__object")
+        print(self.__object)
+        for key, obj in self.__object.items():
+            print("Print obj.to_dict() method")
+            print(obj.to_dict())
             json_dict[key] = obj.to_dict()
             
+        try:
+            with open(FileStorage.__file_path, "w") as file:
+                print("Try to create file")
+                print(json_dict)
+                json.dump(json_dict, file)
+        except Exception as e:
+            print(f"Error saving file: {e}")
 
-        with open(FileStorage.__file_path, "w") as file:
-            json.dump(json_dict, file)
 
     def reload(self):
         """Deserialize object from __file_path"""
@@ -38,4 +46,4 @@ class FileStorage:
                     self.new(eval(obj_name)(**obj_dict))
             
         except FileNotFoundError:
-            pass
+            print(f"File '{FileStorage.__file_path}' not found.")
