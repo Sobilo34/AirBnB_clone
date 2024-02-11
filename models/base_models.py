@@ -27,16 +27,18 @@ class BaseModel():
             self.updated_at = datetime.datetime.now()
 
     def __str__(self):
-        class_name = self.__class__.__name__
+        """String representation of Class instance."""
         return "[{}] ({}) {}".format(
                 self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
+        """Save an updated model instance."""
         self.updated_at = datetime.datetime.now()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
+        """Converts instance attributes to a dictionary."""
         my_dict = self.__dict__.copy()
         my_dict["created_at"] = my_dict["created_at"].isoformat()
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()
