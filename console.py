@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create an intractive and non interactive command line"""
+"""Create an intractive and non interactive command line interpreter"""
 import cmd
 import uuid
 import json
