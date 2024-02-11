@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-
+"""Helps recreate BaseModel class from a dictionary representation."""
 import json
-import models
 
 
 class FileStorage:
+    """Serializes instances to a JSON file and deserializes
+JSON file to instances.
+    """
+
     __file_path = "file.json"
     __object = {}
 
@@ -31,7 +34,6 @@ class FileStorage:
     def reload(self):
         """Deserialize object from __file_path"""
         try:
-            from models.base_models import BaseModel
             with open(FileStorage.__file_path) as file:
                 json_dict = json.load(file)
                 for obj_dict in json_dict.values():
