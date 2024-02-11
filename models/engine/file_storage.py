@@ -27,8 +27,6 @@ JSON file to instances.
             json_dict[key] = obj.to_dict()
 
         with open(FileStorage.__file_path, "w") as file:
-            print("Try to create file")
-            print(json_dict)
             json.dump(json_dict, file)
 
     def reload(self):
@@ -40,6 +38,5 @@ JSON file to instances.
                     obj_name = obj_dict["__class__"]
                     del obj_dict["__class__"]
                     self.new(eval(obj_name)(**obj_dict))
-
         except FileNotFoundError:
             pass

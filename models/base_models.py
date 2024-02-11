@@ -3,6 +3,7 @@
 import models
 import uuid
 import datetime
+from models import storage
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
