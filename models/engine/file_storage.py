@@ -34,9 +34,8 @@ JSON file to instances.
         try:
             with open(FileStorage.__file_path) as file:
                 json_dict = json.load(file)
-                for obj_dict in json_dict.values():
-                    obj_name = obj_dict["__class__"]
-                    del obj_dict["__class__"]
+                for key, obj_dict in json_dict.items():
+                    obj_name = key.split(".")[0]
                     self.new(eval(obj_name)(**obj_dict))
         except FileNotFoundError:
             pass
