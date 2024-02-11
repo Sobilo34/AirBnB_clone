@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""Module defines all common attributes/methods for other classes"""
 import models
 import uuid
 import datetime
@@ -9,7 +9,7 @@ TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 class BaseModel():
-    """ Class that defines all common attributes"""
+    """Defines all common attributes/methods for other classes"""
     def __init__(self, *args, **kwargs):
         """Initalizes instances of the BaseModel"""
         if kwargs:
