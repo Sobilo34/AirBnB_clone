@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+
 """Create an intractive and non interactive command line interpreter"""
+
 import cmd
 import uuid
 import json
 import datetime
+from models.base_model import BaseModel
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -34,20 +38,19 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         class_name = args.split()[0]
-        class_name = class_name.lower()
 
-        self.BaseModel.setdefault(class_name, [])
+        if class_name not in HBNBCommand.__classes:
+            """Print error if class is not in the specified classes"""
+            print("** class doesn't exist **")
+            return
+        else:
+            """Create an instance"""
+            if class_name == 'BaseModel':
+                my_instance = BaseModel()
 
-        with open('BaseModel.json', 'w') as f:
-            json.dump(self.BaseModel, f)
-
-            if class_name not in HBNBCommand.__classes:
-                print("** class doesn't exist **")
-                return
-
-        instance_create = {"id": str(uuid.uuid4())}
-        self.BaseModel[class_name].append(instance_create)
-        print(instance_create['id'])
+            # Save the instance created to json file
+            my_instance.save()
+            print(my_instance.id)
 
     def do_show(self, args):
         """Prints the string representation of an instance"""
@@ -56,25 +59,23 @@ class HBNBCommand(cmd.Cmd):
             return
 
         line = args.split()
+        if len(line) < 2:
+            print("** instance id missing **")
+            return
+
         class_name = line[0]
+        the_id = line[1]
+        my_dict = storage.all()
 
         if class_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
-        elif len(line) < 2:
-            print("** instance id missing **")
-            return
-
-        the_id = line[1]
-
-        if (
-                class_name not in self.BaseModel or
-                the_id not in self.BaseModel[class_name]):
+        elif (class_name,the_id) not in my_dict:
             print("** no instance found **")
             return
         else:
-            print(self.BaseModel[class_name][the_id])
+            print(my_dict["{}.{}".format(class_name, the_id)])
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id"""
@@ -89,28 +90,93 @@ class HBNBCommand(cmd.Cmd):
 
         class_name = args_list[0]
         instance_id = args_list[1]
+        my_dict = storage.all()
 
-        if class_name not in self.BaseModel:
+        if class_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
-        instances = self.BaseModel[class_name]
-
-        if not any(instance['id'] == instance_id for instance in instances):
+        elif (class_name,the_id) not in my_dict:
             print("** no instance found **")
             return
 
-        # Find the index of the instance with the given ID
-        index = next((
-            i for i, instance in enumerate(instances)
-            if instance['id'] == instance_id), None)
 
-        # Remove the instance from the list
-        if index is not None:
-            del instances[index]
-            print('Instance deleted successfully')
         else:
+            del my_dict["{}.{}".format(class_name, instance_id)]
+            storage.save()
+
+    def do_all(self, args):
+            """Print all the content in the dictionary"""
+            my_dict = storage.all()
+            array = []
+
+            if args not in HBNBCommand.__classes:
+                print("** class doesn't exist **")
+            else:
+                for key, value in my_dict.items():
+                    if value.__class__.__name__ == args:
+                        array.append(str(value))
+                print(array)
+
+    def do_update(self, args):
+        """Updates an instance based on the class name and id"""
+        my_dict = storage.all()
+
+        if not args:
+            print("** class name missing **")
+            return
+
+        line = args.split()
+        if len(line) < 2:
+            print("** instance id missing **")
+            return
+
+        class_name = line[0]
+        the_id = line[1]
+        my_dict = storage.all()
+
+        if class_name not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+            return
+
+        elif (class_name,the_id) not in my_dict:
             print("** no instance found **")
+            return
+
+        elif len(line) < 2:
+            print("** instance id missing **")
+            return
+
+        elif len(line) < 3:
+            print("** attribute name missing **")
+            return
+
+        else:
+            for key, value in my_dict.items():
+                class_name = value.__class__.__name__
+                id_val = value.id
+                dict_val = value.__dict__
+
+                if id_val == line[1] and class_name == line[0]:
+                    if len(line) < 4:
+                        print("** value missing **")
+                        break
+
+                    attribute_name = line[2]
+                    new_value = line[3]
+
+                    if attribute_name in dict_val:
+                        # Update attribute value
+                        attribute_type = type(dict_val[attribute_name])
+                        dict_val[attribute_name] = attribute_type(new_value)
+                    else:
+                        # Add new attribute
+                        dict_val[attribute_name] = new_value
+
+                    storage.save()
+                    break
+                else:
+                    print("** no instance found **")
 
 
 if __name__ == '__main__':
