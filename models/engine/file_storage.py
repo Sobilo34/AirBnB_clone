@@ -31,7 +31,7 @@ JSON file to instances.
 
     def reload(self):
         """Deserialize object from __file_path"""
-        from models.base_models import BaseModel 
+        from models.base_model import BaseModel 
         try:
             with open(FileStorage.__file_path) as file:
                 json_dict = json.load(file)
