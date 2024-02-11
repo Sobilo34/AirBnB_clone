@@ -8,7 +8,6 @@ import datetime
 
 class HBNBCommand(cmd.Cmd):
     """Command line interpreter for CRUD in AirBnB console"""
-    intro = "Welcome to HBNBCommand console. Type 'help' for more info"
     prompt = "(hbnb) "
     __classes = ["BaseModel", "OtherClass"]
 
@@ -42,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
         with open('BaseModel.json', 'w') as f:
             json.dump(self.BaseModel, f)
 
-            if class_name not in self.BaseModel:
+            if class_name not in HBNBCommand.__classes:
                 print("** class doesn't exist **")
                 return
 
