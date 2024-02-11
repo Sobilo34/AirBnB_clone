@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 
 import cmd
 import uuid
@@ -30,9 +30,9 @@ class HBNBCommand(cmd.Cmd):
         self.BaseModel = {}
 
     def do_create(self, args):
-        """Creates a new instance of BaseModel and save it to JSON""" 
+        """Creates a new instance of BaseModel and save it to JSON"""
         if not args:
-            print ("** class name missing **")
+            print("** class name missing **")
             return
         class_name = args.split()[0]
         class_name = class_name.lower()
@@ -69,11 +69,13 @@ class HBNBCommand(cmd.Cmd):
 
         the_id = line[1]
 
-        if class_name not in self.BaseModel or the_id not in self.BaseModel[class_name]:
-            print ("** no instance found **")
+        if (
+                class_name not in self.BaseModel or
+                the_id not in self.BaseModel[class_name]):
+            print("** no instance found **")
             return
         else:
-            print (self.BaseModel[class_name][the_id])
+            print(self.BaseModel[class_name][the_id])
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id"""
@@ -100,7 +102,9 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # Find the index of the instance with the given ID
-        index = next((i for i, instance in enumerate(instances) if instance['id'] == instance_id), None)
+        index = next((
+            i for i, instance in enumerate(instances)
+            if instance['id'] == instance_id), None)
 
         # Remove the instance from the list
         if index is not None:
@@ -108,6 +112,7 @@ class HBNBCommand(cmd.Cmd):
             print('Instance deleted successfully')
         else:
             print("** no instance found **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
