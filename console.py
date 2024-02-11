@@ -37,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        class_name = args.split()[0]
+        class_name = args[0]
 
         if class_name not in HBNBCommand.__classes:
             """Print error if class is not in the specified classes"""
@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        elif (class_name,the_id) not in my_dict:
+        elif (class_name, the_id) not in my_dict:
             print("** no instance found **")
             return
         else:
@@ -96,27 +96,26 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        elif (class_name,the_id) not in my_dict:
+        elif (class_name, the_id) not in my_dict:
             print("** no instance found **")
             return
-
 
         else:
             del my_dict["{}.{}".format(class_name, instance_id)]
             storage.save()
 
     def do_all(self, args):
-            """Print all the content in the dictionary"""
-            my_dict = storage.all()
-            array = []
+        """Print all the content in the dictionary"""
+        my_dict = storage.all()
+        array = []
 
-            if args not in HBNBCommand.__classes:
-                print("** class doesn't exist **")
-            else:
-                for key, value in my_dict.items():
-                    if value.__class__.__name__ == args:
-                        array.append(str(value))
-                print(array)
+        if args not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+        else:
+            for key, value in my_dict.items():
+                if value.__class__.__name__ == args:
+                    array.append(str(value))
+                    print(array)
 
     def do_update(self, args):
         """Updates an instance based on the class name and id"""
@@ -139,7 +138,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        elif (class_name,the_id) not in my_dict:
+        elif (class_name, the_id) not in my_dict:
             print("** no instance found **")
             return
 
