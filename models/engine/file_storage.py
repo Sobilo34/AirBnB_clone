@@ -24,8 +24,6 @@ class FileStorage:
             json_dict[key] = obj.to_dict()
 
         with open(FileStorage.__file_path, "w") as file:
-            print("Try to create file")
-            print(json_dict)
             json.dump(json_dict, file)
 
     def reload(self):
