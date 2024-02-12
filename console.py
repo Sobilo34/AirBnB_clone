@@ -29,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
 
     def __init__(self):
         """Initializes the BaseModel"""
-        super().__init__()
+        super().__init__()  # Removed stdout and stdin arguments
         self.BaseModel = {}
 
     def do_create(self, args):
