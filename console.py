@@ -115,13 +115,19 @@ class HBNBCommand(cmd.Cmd):
             my_dict = storage.all()
             array = []
 
-            if args not in HBNBCommand.__classes:
+            if not args:
+                # If args is empty, print all instances
+                array = [str(value) for key, value in my_dict.items()]
+                print(array)
+            elif args not in HBNBCommand.__classes:
+                # If args is not in the valid classes, print an error message
                 print("** class doesn't exist **")
             else:
+                # Otherwise, filter instances based on the provided class name
                 for key, value in my_dict.items():
                     if value.__class__.__name__ == args:
                         array.append(str(value))
-                print(array)
+                    print(array)
 
     def do_update(self, args):
         """Updates an instance based on the class name and id"""
