@@ -32,11 +32,32 @@ JSON file to instances.
     def reload(self):
         """Deserialize object from __file_path"""
         from models.base_model import BaseModel
+        from models.user import User
+        from models.amenity import Amenity
+        from models.state import State
+        from models.city import City
+        from models.place import Place
+        from models.review import Review
+
         try:
             with open(FileStorage.__file_path) as file:
                 json_dict = json.load(file)
                 for key, obj_dict in json_dict.items():
                     obj_name = key.split(".")[0]
-                    self.new(eval(obj_name)(**obj_dict))
+
+                    if obj_name == "User":
+                        model = User(**obj_dict)
+                    elif obj_name == "Amenity":
+                        model = Amenity(**obj_dict)
+                    elif obj_name == "State":
+                        model = State(**obj_dict)
+                    elif obj_name == "City":
+                        model = City(**obj_dict)
+                    elif obj_name == "Place":
+                        model = Place(**obj_dict)
+                    elif obj_name == "Review":
+                        model = Review(**obj_dict)
+                    else:
+                        model = BaseModel(**obj_dict)
         except FileNotFoundError:
             pass

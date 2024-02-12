@@ -8,12 +8,27 @@ import json
 import datetime
 from models.base_model import BaseModel
 from models import storage
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
     """Command line interpreter for CRUD in AirBnB console"""
     prompt = "(hbnb) "
-    __classes = ["BaseModel", "OtherClass"]
+    __classes = [
+            "BaseModel",
+            "User",
+            "Place",
+            "Amenity",
+            "City",
+            "Review",
+            "State"
+            ]
 
     def do_quit(self, args):
         """Quit command to exit the program\n"""
@@ -42,6 +57,23 @@ class HBNBCommand(cmd.Cmd):
             """Create an instance"""
             if class_name == 'BaseModel':
                 my_instance = BaseModel()
+            if class_name == 'User':
+                my_instance = User()
+
+            if class_name == 'Place':
+                my_instance = Place()
+
+            if class_name == 'State':
+                my_instance = State()
+
+            if class_name == 'Amenity':
+                my_instance = Amenity()
+
+            if class_name == 'Review':
+                my_instance = Review()
+
+            if class_name == 'City':
+                my_instance = City()
 
             # Save the instance created to json file
             my_instance.save()
