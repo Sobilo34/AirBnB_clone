@@ -37,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        class_name = args[0]
+        class_name = args.split()[0]
 
         if class_name not in HBNBCommand.__classes:
             """Print error if class is not in the specified classes"""
@@ -64,14 +64,14 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 2:
             return
-
+        
         obj_name = args_list[0]
         obj_id = args_list[1]
 
         if obj_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-
+        
         storage.reload()
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
@@ -95,14 +95,14 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 2:
             return
-
+        
         obj_name = args_list[0]
         obj_id = args_list[1]
 
         if obj_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-
+        
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
 
@@ -110,23 +110,23 @@ class HBNBCommand(cmd.Cmd):
             if k == key:
                 del my_dict[k]
                 break
-
+        
         storage.__object = my_dict
         storage.save()
         return
 
     def do_all(self, args):
-        """Print all the content in the dictionary"""
-        my_dict = storage.all()
-        array = []
+            """Print all the content in the dictionary"""
+            my_dict = storage.all()
+            array = []
 
-        if args not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-        else:
-            for key, value in my_dict.items():
-                if value.__class__.__name__ == args:
-                    array.append(str(value))
-                    print(array)
+            if args not in HBNBCommand.__classes:
+                print("** class doesn't exist **")
+            else:
+                for key, value in my_dict.items():
+                    if value.__class__.__name__ == args:
+                        array.append(str(value))
+                print(array)
 
     def do_update(self, args):
         """Updates an instance based on the class name and id"""
@@ -135,21 +135,20 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args_list = args.split()
-        len_ = len(args)
+        len_ = len(args_list)
         if len_ == 1:
             print("** instance id missing **")
             return
-
+        
         if len_ == 2:
             print("** attribute name missing **")
             return
-
         if len_ == 3:
             print("** value missing **")
             return
         if len_ > 4:
             return
-
+        
         obj_name, obj_id, attr_name, value = args_list
 
         if obj_name not in HBNBCommand.__classes:
@@ -160,14 +159,18 @@ class HBNBCommand(cmd.Cmd):
         key = ".".join([obj_name, obj_id])
 
         try:
-            my_dict[key][attr_name] = value
-            storage.__object = my_dict
-            storage.save()
-
-        except KeyError:
+            obj = my_dict.get(key)
+            if obj:
+                setattr(obj, attr_name, value)
+                obj.save()
+            else:
+                print("** no instance found **")
+                return
+        except Exception as e:
+            print(e)
             print("** no instance found **")
             return
-
+        
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
