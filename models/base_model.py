@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Module defines all common attributes/methods for other classes"""
-import models
 import uuid
 import datetime
 
@@ -40,7 +39,7 @@ class BaseModel():
     def to_dict(self):
         """Converts instance attributes to a dictionary."""
         my_dict = self.__dict__.copy()
-        # my_dict["__class__"] = self.__class__.__name__
+        my_dict["__class__"] = self.__class__.__name__
         my_dict["created_at"] = my_dict["created_at"].isoformat()
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()
         return my_dict
