@@ -64,14 +64,14 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 2:
             return
-        
+
         obj_name = args_list[0]
         obj_id = args_list[1]
 
         if obj_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        
+
         storage.reload()
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
@@ -95,14 +95,14 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 2:
             return
-        
+
         obj_name = args_list[0]
         obj_id = args_list[1]
 
         if obj_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        
+
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
 
@@ -110,7 +110,7 @@ class HBNBCommand(cmd.Cmd):
             if k == key:
                 del my_dict[k]
                 break
-        
+
         storage.__object = my_dict
         storage.save()
         return
@@ -139,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
         if len_ == 1:
             print("** instance id missing **")
             return
-        
+
         if len_ == 2:
             print("** attribute name missing **")
             return
@@ -149,7 +149,7 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 4:
             return
-        
+
         obj_name, obj_id, attr_name, value = args_list
 
         if obj_name not in HBNBCommand.__classes:
@@ -167,7 +167,7 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
             return
-        
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
