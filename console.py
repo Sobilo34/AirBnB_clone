@@ -27,11 +27,6 @@ class HBNBCommand(cmd.Cmd):
         """Handles an empty line not to execute anything"""
         pass
 
-    def __init__(self):
-        """Initializes the BaseModel"""
-        super().__init__()  # Removed stdout and stdin arguments
-        self.BaseModel = {}
-
     def do_create(self, args):
         """Creates a new instance of BaseModel and save it to JSON"""
         if not args:
