@@ -3,7 +3,6 @@
 import models
 import uuid
 import datetime
-from models import storage
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -32,6 +31,7 @@ class BaseModel():
                 self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
+        from models import storage
         """Save an updated model instance."""
         self.updated_at = datetime.datetime.now()
         models.storage.new(self)
