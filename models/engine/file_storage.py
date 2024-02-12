@@ -59,5 +59,7 @@ JSON file to instances.
                         model = Review(**obj_dict)
                     else:
                         model = BaseModel(**obj_dict)
+
+                    FileStorage.__object[key] = model  # Add model to dict
         except FileNotFoundError:
             pass
