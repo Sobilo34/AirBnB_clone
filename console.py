@@ -101,14 +101,12 @@ class HBNBCommand(cmd.Cmd):
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
 
-        for k in my_dict:
-            if k == key:
-                del my_dict[k]
-                break
-        
-        storage.__object = my_dict
-        storage.save()
-        return
+        try:
+            del my_dict[key]
+            storage.save()
+        except KeyError:
+            print("** no instance found **")
+            return
 
     def do_all(self, args):
             """Print all the content in the dictionary"""
