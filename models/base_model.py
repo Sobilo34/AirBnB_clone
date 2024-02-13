@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Module defines all common attributes/methods for other classes"""
-import models
 import uuid
 import datetime
 
