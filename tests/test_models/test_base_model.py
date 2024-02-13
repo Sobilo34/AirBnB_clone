@@ -3,6 +3,7 @@
 import unittest
 from unittest.mock import patch
 from models.base_model import BaseModel
+import datetime
 
 
 class TestBaseModel(unittest.TestCase):
