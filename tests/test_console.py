@@ -7,6 +7,7 @@ from models.base_model import BaseModel
 from models import storage
 from console import HBNBCommand
 
+
 class TestHBNBCommand(unittest.TestCase):
 
     @patch('sys.stdout', new_callable=StringIO)

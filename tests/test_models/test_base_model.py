@@ -1,4 +1,4 @@
-#/usr/bin/env python3
+#!/usr/bin/env python3
 
 import unittest
 from unittest.mock import patch
@@ -38,6 +38,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(mock_new.called)
         self.assertTrue(mock_save.called)
 
+
 if __name__ == '__main__':
     unittest.main()
-
