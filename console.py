@@ -29,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
             "Review",
             "State"
             ]
-    
+
     def precmd(self, line):
         suffix = ".all()"
         class_methods = list(map(lambda x: x+suffix, HBNBCommand.__classes))
@@ -99,14 +99,14 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 2:
             return
-        
+
         obj_name = args_list[0]
         obj_id = args_list[1]
 
         if obj_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        
+
         storage.reload()
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
@@ -130,14 +130,14 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 2:
             return
-        
+
         obj_name = args_list[0]
         obj_id = args_list[1]
 
         if obj_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        
+
         my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
 
@@ -166,13 +166,13 @@ class HBNBCommand(cmd.Cmd):
         #         if value.__class__.__name__ == args.split(".")[0]:
         #             array.append(str(value))
         #     print(array)
-        #     return            
-        
+        #     return
+
         elif args not in HBNBCommand.__classes:
             # If args is not in the valid classes, print an error message
             print("** class doesn't exist **")
             return
-        
+
         else:
             # Otherwise, filter instances based on the provided class name
             for key, value in my_dict.items():
@@ -192,7 +192,7 @@ class HBNBCommand(cmd.Cmd):
         if len_ == 1:
             print("** instance id missing **")
             return
-        
+
         if len_ == 2:
             print("** attribute name missing **")
             return
@@ -201,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
             return
         if len_ > 4:
             return
-        
+
         obj_name, obj_id, attr_name, value = args_list
 
         if obj_name not in HBNBCommand.__classes:
@@ -223,7 +223,7 @@ class HBNBCommand(cmd.Cmd):
             print(e)
             print("** no instance found **")
             return
-        
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
