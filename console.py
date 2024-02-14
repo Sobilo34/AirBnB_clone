@@ -29,6 +29,14 @@ class HBNBCommand(cmd.Cmd):
             "Review",
             "State"
             ]
+    
+    def precmd(self, line):
+        suffix = ".all()"
+        class_methods = list(map(lambda x: x+suffix, HBNBCommand.__classes))
+        if line in class_methods:
+            # BaseModel.all() -> "all BaseModel"
+            return "all" + " " + line.split(".")[0]
+        return line
 
     def do_quit(self, args):
         """Quit command to exit the program\n"""
@@ -141,23 +149,37 @@ class HBNBCommand(cmd.Cmd):
             return
 
     def do_all(self, args):
-            """Print all the content in the dictionary"""
-            my_dict = storage.all()
-            array = []
+        """Print all the content in the dictionary"""
+        my_dict = storage.all()
+        array = []
 
-            if not args:
-                # If args is empty, print all instances
-                array = [str(value) for key, value in my_dict.items()]
-                print(array)
-            elif args not in HBNBCommand.__classes:
-                # If args is not in the valid classes, print an error message
-                print("** class doesn't exist **")
-            else:
-                # Otherwise, filter instances based on the provided class name
-                for key, value in my_dict.items():
-                    if value.__class__.__name__ == args:
-                        array.append(str(value))
-                    print(array)
+        if not args:
+            # If args is empty, print all instances
+            array = [str(value) for key, value in my_dict.items()]
+            print(array)
+            return
+
+        # suffix = ".all()"
+        # class_methods = list(map(lambda x: x+suffix, HBNBCommand.__classes))
+        # if args in class_methods:
+        #     for key, value in my_dict.items():
+        #         if value.__class__.__name__ == args.split(".")[0]:
+        #             array.append(str(value))
+        #     print(array)
+        #     return            
+        
+        elif args not in HBNBCommand.__classes:
+            # If args is not in the valid classes, print an error message
+            print("** class doesn't exist **")
+            return
+        
+        else:
+            # Otherwise, filter instances based on the provided class name
+            for key, value in my_dict.items():
+                if value.__class__.__name__ == args:
+                    array.append(str(value))
+            print(array)
+            return
 
     def do_update(self, args):
         """Updates an instance based on the class name and id"""
