@@ -32,10 +32,39 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         suffix = ".all()"
+        suffix_show = ".show("
+        suffix_destroy = ".destroy("
+        suffix_update = ".update("
         class_methods = list(map(lambda x: x+suffix, HBNBCommand.__classes))
+
         if line in class_methods:
             # BaseModel.all() -> "all BaseModel"
             return "all" + " " + line.split(".")[0]
+
+        if line.startswith(tuple(class_name + ".show" for class_name in HBNBCommand.__classes)):
+            # User.show(id) -> "show User id"
+            class_name, id_part = line.split(".show(")
+            class_name = class_name.strip()
+            id_ = id_part.strip(")")
+            return "show" + " " + class_name + " " + id_
+
+        if line.startswith(tuple(class_name + ".destroy" for class_name in HBNBCommand.__classes)):
+            # Place.destroy(id) -> "destroy Place id"
+            class_name, id_part = line.split(".destroy(")
+            class_name = class_name.strip()
+            id_ = id_part.strip(")")
+            return "destroy" + " " + class_name + " " + id_
+
+        if line.startswith(tuple(class_name + ".update" for class_name in HBNBCommand.__classes)):
+            # City.update(id, attr_name, atrr_val) ->
+            # "update City id attr_name attr_val"
+            parts = line.split(".update(")
+            class_name = parts[0].strip()
+            params = parts[1].strip(")").split(", ")
+            id_ = params[0]
+            attr_name = params[1]
+            attr_val = params[2]
+            return "update" + " " + class_name + " " + id_ + " " + attr_name + " " + attr_val
         return line
 
     def do_quit(self, args):
@@ -158,15 +187,6 @@ class HBNBCommand(cmd.Cmd):
             array = [str(value) for key, value in my_dict.items()]
             print(array)
             return
-
-        # suffix = ".all()"
-        # class_methods = list(map(lambda x: x+suffix, HBNBCommand.__classes))
-        # if args in class_methods:
-        #     for key, value in my_dict.items():
-        #         if value.__class__.__name__ == args.split(".")[0]:
-        #             array.append(str(value))
-        #     print(array)
-        #     return
 
         elif args not in HBNBCommand.__classes:
             # If args is not in the valid classes, print an error message
