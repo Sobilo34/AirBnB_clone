@@ -41,30 +41,37 @@ class HBNBCommand(cmd.Cmd):
             # BaseModel.all() -> "all BaseModel"
             return "all" + " " + line.split(".")[0]
 
-        if line.startswith(tuple(class_name + ".show" for class_name in HBNBCommand.__classes)):
+        if line.startswith(
+                tuple(name + ".show" for name in HBNBCommand.__classes)
+                ):
             # User.show(id) -> "show User id"
-            class_name, id_part = line.split(".show(")
-            class_name = class_name.strip()
+            name, id_part = line.split(".show(")
+            name = name.strip()
             id_ = id_part.strip(")")
-            return "show" + " " + class_name + " " + id_
+            return "show" + " " + name + " " + id_
 
-        if line.startswith(tuple(class_name + ".destroy" for class_name in HBNBCommand.__classes)):
+        if line.startswith(
+                tuple(name + ".destroy" for name in HBNBCommand.__classes)
+                ):
             # Place.destroy(id) -> "destroy Place id"
-            class_name, id_part = line.split(".destroy(")
-            class_name = class_name.strip()
+            name, id_part = line.split(".destroy(")
+            name = name.strip()
             id_ = id_part.strip(")")
-            return "destroy" + " " + class_name + " " + id_
+            return "destroy" + " " + name + " " + id_
 
-        if line.startswith(tuple(class_name + ".update" for class_name in HBNBCommand.__classes)):
+        if line.startswith(
+                tuple(name + ".update" for name in HBNBCommand.__classes)
+                ):
             # City.update(id, attr_name, atrr_val) ->
             # "update City id attr_name attr_val"
             parts = line.split(".update(")
-            class_name = parts[0].strip()
+            name = parts[0].strip()
             params = parts[1].strip(")").split(", ")
             id_ = params[0]
             attr_name = params[1]
             attr_val = params[2]
-            return "update" + " " + class_name + " " + id_ + " " + attr_name + " " + attr_val
+            return "update {} {} {} {}".format(
+                    name, id_, attr_name, attr_val)
         return line
 
     def do_quit(self, args):
