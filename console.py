@@ -75,7 +75,9 @@ class HBNBCommand(cmd.Cmd):
             last_param = params[-1]
 
             if last_param.startswith("{") and last_param.endswith("}"):
-                return "update {} {}".format(name, " ".join(params))
+                # return "update {} {}".format(name, " ".join(params))
+                print("update {} {}".format(name, " ".join(params)))
+
             else:
                 attr_name = params[1]
                 attr_val = params[2]
