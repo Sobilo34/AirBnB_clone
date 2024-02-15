@@ -31,15 +31,18 @@ class HBNBCommand(cmd.Cmd):
             ]
 
     def precmd(self, line):
-        suffix = ".all()"
-        suffix_show = ".show("
-        suffix_destroy = ".destroy("
-        suffix_update = ".update("
-        class_methods = list(map(lambda x: x+suffix, HBNBCommand.__classes))
+        suffix_all = ".all()"
+        suffix_cnt = ".count()"
+        all_meth = list(map(lambda x: x+suffix_all, HBNBCommand.__classes))
+        count_meth = list(map(lambda x: x+suffix_cnt, HBNBCommand.__classes))
 
-        if line in class_methods:
+        if line in all_meth:
             # BaseModel.all() -> "all BaseModel"
             return "all" + " " + line.split(".")[0]
+
+        if line in count_meth:
+            # Amenity.count() -> "count Amenity"
+            return "count" + " " + line.split(".")[0]
 
         if line.startswith(
                 tuple(name + ".show" for name in HBNBCommand.__classes)
@@ -205,8 +208,39 @@ class HBNBCommand(cmd.Cmd):
             for key, value in my_dict.items():
                 if value.__class__.__name__ == args:
                     array.append(str(value))
+
             print(array)
             return
+
+    def do_count(self, args):
+        """Retrives the number of instances of a class"""
+        my_dict = storage.all()
+        instances = []
+
+        if not args:
+            print("** class name missing **")
+            return
+
+        elif args not in HBNBCommand.__classes:
+            # If args is not in the valid classes, print an error message
+            print("** class doesn't exist **")
+            return
+
+        else:
+            for key, value in my_dict.items():
+                if value.__class__.__name__ == args:
+                    instances.append((key, value))
+
+            # Now! split the instances
+            instance_dict = dict(instances)
+            split_instance = {}
+
+            for key, value in instance_dict.items():
+                id_ = key.split('.')[1]
+                split_instance[id_] = value
+
+            instance_count = len(split_instance)
+            print(instance_count)
 
     def do_update(self, args):
         """Updates an instance based on the class name and id"""
