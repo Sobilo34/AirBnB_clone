@@ -244,6 +244,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, args):
         """Updates an instance based on the class name and id"""
+        my_dict = storage.all()
 
         if not args:
             print("** class name missing **")
@@ -258,8 +259,26 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
             return
         if len_ == 3:
-            print("** value missing **")
-            return
+            obj_name, obj_id, dictionary = args_list
+            key = ".".join([obj_name, obj_id])
+
+            if not dictionary.startswith("{") and not dictionary.endswith("}"):
+                print("** value missing **")
+                return
+
+            try:
+                obj = my_dict.get(key)
+                if obj:
+                    attr_dict = eval(dictionary)
+                    if isinstance(attr_dict, dict):
+                        for attr_name, attr_value in attr_dict.items():
+                            obj.__dict__[attr_name] = attr_value
+                        obj.updated_at = datetime.now()
+                        obj.save()
+                        my_dict[key] = obj # Update the object in my_dic
+            except Exception as e:
+                print(e)
+
         if len_ > 4:
             return
 
@@ -269,7 +288,6 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        my_dict = storage.all()
         key = ".".join([obj_name, obj_id])
 
         try:
