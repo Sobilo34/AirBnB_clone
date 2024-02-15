@@ -65,16 +65,22 @@ class HBNBCommand(cmd.Cmd):
         if line.startswith(
                 tuple(name + ".update" for name in HBNBCommand.__classes)
                 ):
-            # City.update(id, attr_name, atrr_val) ->
-            # "update City id attr_name attr_val"
+            # Split the line by ".update("
             parts = line.split(".update(")
             name = parts[0].strip()
             params = parts[1].strip(")").split(", ")
+
+            # Now!, extract id_ and examine if the last parameter is a dict
             id_ = params[0]
-            attr_name = params[1]
-            attr_val = params[2]
-            return "update {} {} {} {}".format(
-                    name, id_, attr_name, attr_val)
+            last_param = params[-1]
+
+            if last_param.startswith("{") and last_param.endswith("}"):
+                return "update {} {}".format(name, " ".join(params))
+            else:
+                attr_name = params[1]
+                attr_val = params[2]
+                return "update {} {} {} {}".format(
+                        name, id_, attr_name, attr_val)
         return line
 
     def do_quit(self, args):
